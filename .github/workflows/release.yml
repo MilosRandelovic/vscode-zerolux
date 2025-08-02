@@ -1,0 +1,115 @@
+name: Create GitHub Release & Publish to VS Code Marketplace
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      AZURE_PAT: ${{ secrets.AZURE_PAT }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'npm'
+
+      - name: Install required dependencies
+        run: npm ci
+
+      - name: Set git config
+        run: |
+          # Default Github actions bot user account
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Extract version from package.json
+        id: version
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Validate version
+        run: |
+          # Check if git tag already exists
+          # (i.e. check if the version in package.json has not been bumped)
+          if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
+            echo "❌ Error: Git tag v${VERSION} already exists!"
+            echo "Please update the version in package.json before publishing."
+            exit 1
+          fi
+
+      - name: Get previous tag for release notes
+        id: previous_tag
+        run: |
+          git fetch --tags --prune-tags
+          PREVIOUS_TAG=$(git tag -l --sort=-version:refname | head -n1 || echo "")
+          echo "previous_tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+
+      - name: Create and push tag
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
+
+      - name: Package VS Code extension
+        run: |
+          # Package the extension
+          npx vsce package --out "zerolux-theme-${{ steps.version.outputs.version }}.vsix"
+
+      - name: Create release assets
+        run: |
+          # Create tar.gz of the repository
+          tar -czf "release-${{ steps.version.outputs.version }}.tar.gz" \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='*.tar.gz' \
+            . || true
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          PREVIOUS_TAG="${{ steps.previous_tag.outputs.previous_tag }}"
+
+          if [ -n "$PREVIOUS_TAG" ]; then
+            NOTES=$(git log --no-merges --pretty=format:"- %s %h" ${PREVIOUS_TAG}..HEAD)
+          else
+            NOTES=$(git log --no-merges --pretty=format:"- %s %h" -10)
+          fi
+
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Release ${{ steps.version.outputs.tag }}
+          body: ${{ steps.release_notes.outputs.notes }}
+          files: |
+            release-${{ steps.version.outputs.version }}.tar.gz
+            zerolux-theme-${{ steps.version.outputs.version }}.vsix
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to VS Code Marketplace
+        run: |
+          # Publish to VS Code Marketplace
+          npx vsce publish --packagePath "zerolux-theme-${{ steps.version.outputs.version }}.vsix"
+        env:
+          VSCE_PAT: ${{ secrets.AZURE_PAT }}

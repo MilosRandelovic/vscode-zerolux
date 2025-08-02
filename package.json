@@ -1,0 +1,46 @@
+{
+  "name": "zerolux-theme",
+  "displayName": "ZeroLux OLED Theme",
+  "description": "An OLED friendly pure black dark theme for VS Code, with enhanced contrast and visibility",
+  "version": "1.0.0",
+  "publisher": "MilosRandelovic",
+  "author": {
+    "name": "Miloš Ranđelović"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MilosRandelovic/vscode-zerolux.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MilosRandelovic/vscode-zerolux/issues"
+  },
+  "homepage": "https://github.com/MilosRandelovic/vscode-zerolux#readme",
+  "keywords": [
+    "theme",
+    "dark",
+    "black",
+    "oled",
+    "high-contrast",
+    "pure-black"
+  ],
+  "license": "MIT",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.102.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "ZeroLux OLED Theme",
+        "uiTheme": "vs-dark",
+        "path": "./themes/zerolux-color-theme.json"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^3.6.0"
+  }
+}
