@@ -44,8 +44,8 @@ jobs:
         run: |
           # Check if git tag already exists
           # (i.e. check if the version in package.json has not been bumped)
-          if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
-            echo "❌ Error: Git tag v${VERSION} already exists!"
+          if git rev-parse "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            echo "❌ Error: Git tag ${{ steps.version.outputs.tag }} already exists!"
             echo "Please update the version in package.json before publishing."
             exit 1
           fi
@@ -59,8 +59,8 @@ jobs:
 
       - name: Create and push tag
         run: |
-          git tag "v${{ steps.version.outputs.version }}"
-          git push origin "v${{ steps.version.outputs.version }}"
+          git tag "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
 
       - name: Package VS Code extension
         run: |
