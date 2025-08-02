@@ -1,0 +1,17 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Test Extension",
+			"type": "shell",
+			"command": "code",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--new-window"
+			],
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}
