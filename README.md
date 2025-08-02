@@ -2,28 +2,20 @@
 
 A pure black dark theme for Visual Studio Code optimized for OLED displays with enhanced contrast and visibility.
 
+![Screenshot](/img/screenshot.png)
+
 ## Features
 
 - **OLED Optimized**: Pure black backgrounds (#000000) for true black pixels on OLED displays
 - **Enhanced Contrast**: Carefully selected colors for optimal readability and reduced eye strain
 - **Consistent Design**: Cohesive color scheme across all VS Code UI elements
-- **High Contrast Mode**: Based on VS Code's high contrast dark theme for accessibility
-
-## Color Palette
-
-- **Primary Background**: Pure Black (#000000)
-- **Active Elements**: Dark Gray (#2d2d30)
-- **Borders**: Medium Gray (#333333)
-- **Input Fields**: Very Dark Gray (#1a1a1a)
-- **Accent**: VS Code Blue (#0078d4)
-- **Text**: Pure White (#ffffff)
 
 ## Installation
 
 ### From VS Code Marketplace
 
 1. Open VS Code
-2. Go to Extensions (Ctrl+Shift+X)
+2. Go to Extensions
 3. Search for "ZeroLux OLED Theme"
 4. Click Install
 
@@ -39,12 +31,19 @@ A pure black dark theme for Visual Studio Code optimized for OLED displays with 
 ## Usage
 
 1. Open VS Code
-2. Go to File > Preferences > Color Theme (or use Ctrl+K Ctrl+T)
+2. Go to File > Preferences > Color Theme
 3. Select "ZeroLux OLED Theme" from the list
+4. Enjoy coding in pure darkness!
 
-## Development
+## License
+
+This extension is provided as-is. Please refer to the license file for details.
+
+## Contributions
 
 This extension was created using the VS Code Extension Generator with the color theme template.
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
 
 ### Testing
 
@@ -56,15 +55,5 @@ This extension was created using the VS Code Extension Generator with the color 
 
 ```bash
 npm install
-vsce package
+npx vsce package
 ```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues and pull requests.
-
-## License
-
-This extension is provided as-is. Please refer to the license file for details.
-
-**Enjoy coding in pure darkness!**
