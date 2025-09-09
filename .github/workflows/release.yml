@@ -106,7 +106,12 @@ jobs:
 
       - name: Publish to VS Code Marketplace
         run: |
-          # Publish to VS Code Marketplace
           npx vsce publish --packagePath "zerolux-theme-${{ steps.version.outputs.version }}.vsix"
         env:
           VSCE_PAT: ${{ secrets.AZURE_PAT }}
+
+      - name: Publish to Open VSX Marketplace
+        run: |
+          npx ovsx publish --pat $OPENVSX_PAT
+        env:
+          OPENVSX_PAT: ${{ secrets.OPENVSX_PAT }}
