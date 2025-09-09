@@ -2,7 +2,7 @@
   "name": "zerolux-theme",
   "displayName": "ZeroLux OLED Theme",
   "description": "An OLED friendly pure black dark theme for VS Code, with enhanced contrast and visibility",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "MilosRandelovic",
   "author": {
     "name": "Miloš Ranđelović"

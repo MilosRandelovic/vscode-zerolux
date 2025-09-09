@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.3]
+
+- Updated release script
+
 ## [1.0.2]
 
 - Added a sidebar border

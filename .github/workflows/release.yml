@@ -112,6 +112,6 @@ jobs:
 
       - name: Publish to Open VSX Marketplace
         run: |
-          npx ovsx publish --pat $OPENVSX_PAT
+          npx ovsx publish --packagePath "zerolux-theme-${{ steps.version.outputs.version }}.vsix"
         env:
-          OPENVSX_PAT: ${{ secrets.OPENVSX_PAT }}
+          OVSX_PAT: ${{ secrets.OPENVSX_PAT }}
